@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TDNS Phản ánh sự cố</string>
+    <string name="license">runtimelite,1000,rud6046938574,none,4N5X0H4AH5JB003AD169</string>
+    <string name="sql_column_login_displayname">DisplayName</string>
+    <string name="title_activity_basemap">Bản đồ nền</string>
+    <string name="tab_basemap_1">Trực tuyến</string>
+    <string name="tab_basemap_2">Trên thiết bị</string>
+    <string name="tab_bookmark_1">Đánh dấu</string>
+    <string name="tab_bookmark_2">Địa chỉ của tôi</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_layer">Lớp dữ liệu</string>
+    <string name="title_activity_bookmark">Đánh dấu</string>
+    <string name="title_search">Tìm kiếm tên trạm, Số trụ và…</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>

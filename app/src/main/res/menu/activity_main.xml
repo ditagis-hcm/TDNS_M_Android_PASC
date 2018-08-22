@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content">
+    <item
+        android:id="@+id/item_measure"
+        android:title="@string/menu_title_measure"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/item_basemap"
+        android:title="@string/menu_title_basemap"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/item_feature"
+        android:title="@string/menu_title_layer"
+        app:showAsAction="withText" />
+</menu>

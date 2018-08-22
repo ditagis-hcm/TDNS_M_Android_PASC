@@ -1,0 +1,16 @@
+<resources>
+    <string name="txt_forget_password">Quên mật khẩu</string>
+    <string name="txt_change_account">Đổi tài khoản</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="txt_hint_password">Nhập mật khẩu</string>
+    <string name="txt_hint_username">Nhập tên đăng nhập</string>
+    <string name="img_logo">Logo</string>
+    <string name="img_username">Icon tài khoản</string>
+    <string name="img_password">Icon mật khẩu</string>
+    <string name="action_logout">Đăng xuất</string>
+    <string name="validate_no_connect">Không có kết nối internet</string>
+    <string name="connect_message">Đang kết nối đến máy chủ…</string>
+    <string name="login_message">Đang kiểm tra thông tin đăng nhập…</string>
+    <string name="info_login_empty">Tên đăng nhập hoặc mật khẩu không được để trống</string>
+    <string name="validate_login_fail">Sai tên đăng nhập hoặc mật khẩu</string>
+</resources>

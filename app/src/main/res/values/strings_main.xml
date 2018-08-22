@@ -1,0 +1,7 @@
+<resources>
+    <string name="main_contentDescription_location">Vị trí</string>
+    <string name="main_contentDescription_add">Thêm</string>
+    <string name="main_contentDescription_search">Tìm kiếm</string>
+    <string name="main_contentDescription_bookmark">Đánh dấu</string>
+    <string name="main_contentDescription_menu">Menu</string>
+</resources>
