@@ -4,6 +4,7 @@ import android.app.Application;
 
 import vn.com.tdns.qlsc.entities.DFeatureLayer;
 import vn.com.tdns.qlsc.entities.DLayerInfo;
+import vn.com.tdns.qlsc.entities.DiemSuCo;
 import vn.com.tdns.qlsc.entities.User;
 
 public class DApplication extends Application {
@@ -12,6 +13,13 @@ public class DApplication extends Application {
     {
         getConstant = new Constant();
     }
+
+    public DiemSuCo getDiemSuCo;
+
+    {
+        getDiemSuCo = new DiemSuCo();
+    }
+
 
     public User userDangNhap;
     private DFeatureLayer mDFeatureLayer;

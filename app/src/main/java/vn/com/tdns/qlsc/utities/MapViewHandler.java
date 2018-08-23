@@ -72,14 +72,14 @@ public class MapViewHandler extends Activity {
     public void addFeature(byte[] image, Point pointFindLocation) {
         mClickPoint = mMapView.locationToScreen(pointFindLocation);
 
-        SingleTapAddFeatureAsync singleTapAdddFeatureAsync = new SingleTapAddFeatureAsync(mClickPoint, mMainActivity,
-                image, mServiceFeatureTable, mMapView, mGeocoder, output -> {
+        SingleTapAddFeatureAsync singleTapAdddFeatureAsync = new SingleTapAddFeatureAsync( mMainActivity,
+                 mServiceFeatureTable, mMapView, mGeocoder, output -> {
             if (output != null) {
                 mPopUp.showPopup((ArcGISFeature) output, true);
             }
         });
 //        Point add_point = mMapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).getTargetGeometry().getExtent().getCenter();
-        singleTapAdddFeatureAsync.execute(pointFindLocation);
+        singleTapAdddFeatureAsync.execute();
     }
 
 

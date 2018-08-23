@@ -14,10 +14,6 @@ import com.esri.arcgisruntime.data.FeatureEditResult;
 import com.esri.arcgisruntime.data.FeatureQueryResult;
 import com.esri.arcgisruntime.data.QueryParameters;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
-import com.esri.arcgisruntime.geometry.Geometry;
-import com.esri.arcgisruntime.geometry.GeometryEngine;
-import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.MapView;
 
 import java.util.Calendar;
@@ -34,17 +30,15 @@ import vn.com.tdns.qlsc.utities.MySnackBar;
  * Created by ThanLe on 4/16/2018.
  */
 
-public class SingleTapAddFeatureAsync extends AsyncTask<Point, Feature, Void> {
+public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
     private ProgressDialog mDialog;
     @SuppressLint("StaticFieldLeak")
     private Activity mActivity;
-    private byte[] mImage;
     private ServiceFeatureTable mServiceFeatureTable;
     private ArcGISFeature mSelectedArcGISFeature;
     @SuppressLint("StaticFieldLeak")
     private MapView mMapView;
     private AsyncResponse mDelegate;
-    private android.graphics.Point mClickPoint;
     private Geocoder mGeocoder;
     private DApplication mApplication;
 
@@ -52,14 +46,12 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Point, Feature, Void> {
         void processFinish(Feature output);
     }
 
-    public SingleTapAddFeatureAsync(android.graphics.Point clickPoint, Activity activity, byte[] image,
+    public SingleTapAddFeatureAsync(Activity activity,
                                     ServiceFeatureTable serviceFeatureTable, MapView mapView, Geocoder geocoder, AsyncResponse delegate) {
         this.mServiceFeatureTable = serviceFeatureTable;
         this.mMapView = mapView;
-        this.mImage = image;
         this.mActivity = activity;
         this.mApplication = (DApplication) activity.getApplication();
-        this.mClickPoint = clickPoint;
         this.mDialog = new ProgressDialog(activity, android.R.style.Theme_Material_Dialog_Alert);
         this.mDelegate = delegate;
         this.mGeocoder = geocoder;
@@ -74,34 +66,18 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Point, Feature, Void> {
     }
 
     @Override
-    protected Void doInBackground(Point... params) {
-        final Point clickPoint = params[0];
+    protected Void doInBackground(Void... params) {
+//        final Point clickPoint = params[0];
 
         final Feature feature;
         try {
             feature = mServiceFeatureTable.createFeature();
-            feature.setGeometry(clickPoint);
-            FindLocationAsycn findLocationAsycn = new FindLocationAsycn(mActivity, false,
-                    mGeocoder, output -> {
-                if (output != null) {
-                    feature.getAttributes().put(Constant.FIELD_SUCO.VI_TRI, output.get(0).getLocation());
-                    String searchStr = "";
-                    String timeID;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        timeID = getTimeID();
-                        searchStr = Constant.FIELD_SUCO.ID_SUCO + " like '%" + timeID + "'";
-                    }
-                    QueryParameters queryParameters = new QueryParameters();
-                    queryParameters.setWhereClause(searchStr);
-                    mServiceFeatureTable.queryFeaturesAsync(queryParameters).addDoneListener(() -> addFeatureAsync(feature));
-                }
-            });
-            Geometry project = GeometryEngine.project(clickPoint, SpatialReferences.getWgs84());
-            double[] location = {project.getExtent().getCenter().getX(), project.getExtent().getCenter().getY()};
-            findLocationAsycn.setmLongtitude(location[0]);
-            findLocationAsycn.setmLatitude(location[1]);
-
-            findLocationAsycn.execute();
+            feature.setGeometry(mApplication.getDiemSuCo.getPoint());
+            feature.getAttributes().put(Constant.FIELD_SUCO.VI_TRI, mApplication.getDiemSuCo.getVitri());
+            feature.getAttributes().put(Constant.FIELD_SUCO.GHI_CHU, mApplication.getDiemSuCo.getGhiChu());
+            feature.getAttributes().put(Constant.FIELD_SUCO.NGUOI_CAP_NHAT, mApplication.getDiemSuCo.getNguoiCapNhat());
+            feature.getAttributes().put(Constant.FIELD_SUCO.SDT, mApplication.getDiemSuCo.getSdt());
+            addFeatureAsync(feature);
 
         } catch (Exception e) {
             MySnackBar.make(mMapView, mActivity.getString(R.string.message_error_add_feature), true);
@@ -110,10 +86,6 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Point, Feature, Void> {
 
 
         return null;
-    }
-
-    private String getTimeID() {
-        return Constant.DATE_FORMAT.format(Calendar.getInstance().getTime());
     }
 
     private void addFeatureAsync(final Feature feature) {

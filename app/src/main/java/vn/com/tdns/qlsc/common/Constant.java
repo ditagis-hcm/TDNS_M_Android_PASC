@@ -7,6 +7,7 @@ public class Constant {
     public static final SimpleDateFormat DATE_FORMAT_VIEW = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
     public static final int REQUEST_CODE_BASEMAP = 5;
     public static final int REQUEST_CODE_LAYER = 6;
+    public static final int REQUEST_CODE_ADD_FEATURE = 7;
     //    public static final String SERVER_API = "http://gis.capnuoccholon.com.vn/cholon/api";
     private final String SERVER_API = "http://sawagis.vn/tdns";
     public String API_LOGIN;

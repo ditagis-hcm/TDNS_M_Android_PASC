@@ -139,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
 //        featureLayer.setDefinitionExpression(null);
         featureLayer.setName(mApplication.getDLayerInfo.getTitleLayer());
-        featureLayer.setMaxScale(0);
-        featureLayer.setMinScale(1000000);
         featureLayer.setPopupEnabled(true);
         featureLayer.addDoneLoadingListener(() -> {
 
@@ -407,9 +405,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (output != null) {
                 String adminArea = output.get(0).getAdminArea();
                 if (adminArea.equals(mApplication.getConstant.ADMIN_AREA_TPHCM)) {
+                    mApplication.getDiemSuCo.setPoint(mPointFindLocation);
+                    mApplication.getDiemSuCo.setVitri(output.get(0).getLocation());
+                    Intent intent = new Intent(this, AddFeatureActivity.class);
+                    startActivityForResult(intent, Constant.REQUEST_CODE_ADD_FEATURE);
                     mTxtSearchView.setQuery("", true);
-                    mMapViewHandler.addFeature(null, mPointFindLocation);
-                    deleteSearching();
+//
                 } else {
                     Toast.makeText(MainActivity.this, R.string.message_not_area_management, Toast.LENGTH_LONG).show();
                 }
@@ -457,6 +458,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Constant.REQUEST_CODE_BASEMAP:
                 break;
             case Constant.REQUEST_CODE_LAYER:
+                break;
+            case Constant.REQUEST_CODE_ADD_FEATURE:
+                if (mApplication.getDiemSuCo.getPoint() != null) {
+                    mMapViewHandler.addFeature(null, mApplication.getDiemSuCo.getPoint());
+                    deleteSearching();
+                }
                 break;
         }
     }

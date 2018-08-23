@@ -18,16 +18,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="vn.com.tdns.qlsc.common.DApplication"
+        android:name=".common.DApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="vn.com.tdns.qlsc.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,20 +35,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="vn.com.tdns.qlsc.BasemapActivity"
+            android:name=".BasemapActivity"
             android:label="@string/title_activity_basemap"
-            android:parentActivityName="vn.com.tdns.qlsc.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="vn.com.tdns.qlsc.LayerActivity"
+            android:name=".LayerActivity"
             android:label="@string/title_activity_layer"
-            android:parentActivityName="vn.com.tdns.qlsc.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="vn.com.tdns.qlsc.BookmarkActivity"
+            android:name=".BookmarkActivity"
             android:label="@string/title_activity_bookmark"
-            android:parentActivityName="vn.com.tdns.qlsc.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:label="Báo sự cố"
+            android:name=".AddFeatureActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

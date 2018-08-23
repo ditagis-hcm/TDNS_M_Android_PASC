@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import vn.com.tdns.qlsc.R;
 import vn.com.tdns.qlsc.common.DApplication;
 
 public class GenerateIDSuCoAsycn extends AsyncTask<Void, Void, String> {
@@ -32,10 +31,10 @@ public class GenerateIDSuCoAsycn extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        this.mDialog = new ProgressDialog(this.mActivity, android.R.style.Theme_Material_Dialog_Alert);
-        this.mDialog.setMessage(mActivity.getString(R.string.message_preparing));
-        this.mDialog.setCancelable(false);
-        this.mDialog.show();
+//        this.mDialog = new ProgressDialog(this.mActivity.getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+//        this.mDialog.setMessage(mActivity.getString(R.string.message_preparing));
+//        this.mDialog.setCancelable(false);
+//        this.mDialog.show();
     }
 
     @Override
@@ -60,6 +59,7 @@ public class GenerateIDSuCoAsycn extends AsyncTask<Void, Void, String> {
                 conn.disconnect();
             }
         } catch (Exception e) {
+            publishProgress();
             Log.e("Lỗi lấy IDSuCo", e.toString());
         }
         return id;
@@ -75,7 +75,7 @@ public class GenerateIDSuCoAsycn extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String value) {
 //        if (khachHang != null) {
-        mDialog.dismiss();
+        if (mDialog != null && mDialog.isShowing()) mDialog.dismiss();
         this.mDelegate.processFinish(value);
 //        }
     }
