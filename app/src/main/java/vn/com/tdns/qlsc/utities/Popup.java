@@ -428,9 +428,9 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
 //            case R.id.imgBtn_ViewMoreInfo:
 //                viewMoreInfo(false);
 //                break;
-//            case R.id.imgBtn_timkiemdiachi_themdiemsuco:
-//                mMainActivity.onClick(view);
-//                break;
+            case R.id.imgBtn_timkiemdiachi_themdiemsuco:
+                mMainActivity.onClick(view);
+                break;
         }
     }
 }

@@ -5,6 +5,7 @@
     <dimen name="divider_small">8dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_medium">15dp</dimen>
+    <dimen name="margin_large">60dp</dimen>
     <dimen name="padding_layout">20dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->

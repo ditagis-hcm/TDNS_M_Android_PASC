@@ -10,9 +10,19 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">20sp</item>
     </style>
+    <style name="MyTextAppearance.Black.Bold" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="MyTextAppearance.Black.Small" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MyTextAppearance.Black.Tiny" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="MyTextAppearance.Black.Small.Italic" parent="@android:style/TextAppearance">

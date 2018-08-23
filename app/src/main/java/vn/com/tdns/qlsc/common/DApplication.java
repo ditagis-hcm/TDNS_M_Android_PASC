@@ -27,10 +27,27 @@ public class DApplication extends Application {
     public DLayerInfo getDLayerInfo;
 
     {
+        String[] outFieldsArr = new String[]{
+                Constant.FIELD_SUCO.ID_SUCO,
+                Constant.FIELD_SUCO.VI_TRI,
+                Constant.FIELD_SUCO.GHI_CHU,
+                Constant.FIELD_SUCO.NGAY_CAP_NHAT,
+                Constant.FIELD_SUCO.NGUYEN_NHAN
+        };
+        String[] addFieldsArr = new String[]{
+                Constant.FIELD_SUCO.ID_SUCO,
+                Constant.FIELD_SUCO.VI_TRI,
+                Constant.FIELD_SUCO.GHI_CHU,
+                Constant.FIELD_SUCO.NGAY_CAP_NHAT,
+                Constant.FIELD_SUCO.NGUYEN_NHAN,
+                Constant.FIELD_SUCO.TRANG_THAI,
+                Constant.FIELD_SUCO.NGUOI_CAP_NHAT,
+                Constant.FIELD_SUCO.NGAY_THONG_BAO,
+                Constant.FIELD_SUCO.SDT
+        };
         getDLayerInfo = new DLayerInfo("", "Sự cố",
-                "http://sawagis.vn/arcgis/rest/services/TruyenDan/TruyenDanDiemSuCo/FeatureServer/0",
-                true, false, false, true, null,
-                "IDSUCO,GhiChu,NGAYCAPNHAT,VITRI,NGUYENNHAN",
-                "IDSUCO,TRANGTHAI,GhiChu,NGUOICAPNHAT,NGAYCAPNHAT,NGAYTHONGBAO,VITRI,SODIENTHOAI,NGUYENNHAN");
+                getConstant.URL_SUCO,
+                true, false, false, true, null, outFieldsArr, addFieldsArr);
     }
+
 }

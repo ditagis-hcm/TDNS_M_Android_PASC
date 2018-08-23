@@ -16,12 +16,10 @@ public class DLayerInfo {
     private boolean isEdit;
     private boolean isView;
     private String definition;
-    private String outFields;
     private String[] outFieldsArr;
-    private String addFields;
     private String[] addFieldsArr;
 
-    public DLayerInfo(String id, String titleLayer, String url, boolean isCreate, boolean isDelete, boolean isEdit, boolean isView, String definition, String outFields, String addFields) {
+    public DLayerInfo(String id, String titleLayer, String url, boolean isCreate, boolean isDelete, boolean isEdit, boolean isView, String definition, String[] outFieldsArr, String[] addFieldsArr) {
         this.id = id;
         this.titleLayer = titleLayer;
         this.url = url;
@@ -30,22 +28,8 @@ public class DLayerInfo {
         this.isEdit = isEdit;
         this.isView = isView;
         this.definition = definition;
-        this.outFields = outFields;
-        this.addFields = addFields;
-        this.outFieldsArr = outFields.split(",");
-        this.addFieldsArr = addFields.split(",");
-    }
-
-    public String getAddFields() {
-        return addFields;
-    }
-
-    public String[] getAddFieldsArr() {
-        return addFieldsArr;
-    }
-
-    public String[] getOutFieldsArr() {
-        return outFieldsArr;
+        this.outFieldsArr = outFieldsArr;
+        this.addFieldsArr = addFieldsArr;
     }
 
     public String getId() {
@@ -80,7 +64,11 @@ public class DLayerInfo {
         return definition;
     }
 
-    public String getOutFields() {
-        return outFields;
+    public String[] getOutFieldsArr() {
+        return outFieldsArr;
+    }
+
+    public String[] getAddFieldsArr() {
+        return addFieldsArr;
     }
 }
