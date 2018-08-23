@@ -59,7 +59,7 @@ public class FindLocationAsycn extends AsyncTask<String, Void, List<DAddress>> {
                 List<Address> addressList = mGeocoder.getFromLocationName(text, 5);
                 for (Address address : addressList)
                     lstLocation.add(new DAddress(address.getLongitude(), address.getLatitude(),
-                            address.getSubAdminArea(), address.getAddressLine(0)));
+                            address.getSubAdminArea(),address.getAdminArea(), address.getAddressLine(0)));
             } catch (IOException ignored) {
                 //todo grpc failed
                 Log.e("error", ignored.toString());
@@ -70,7 +70,7 @@ public class FindLocationAsycn extends AsyncTask<String, Void, List<DAddress>> {
                 List<Address> addressList = mGeocoder.getFromLocation(mLatitude, mLongtitude, 1);
                 for (Address address : addressList)
                     lstLocation.add(new DAddress(address.getLongitude(), address.getLatitude(),
-                            address.getSubAdminArea(), address.getAddressLine(0)));
+                            address.getSubAdminArea(),address.getAdminArea(), address.getAddressLine(0)));
             } catch (IOException ignored) {
                 Log.e("error", ignored.toString());
             }

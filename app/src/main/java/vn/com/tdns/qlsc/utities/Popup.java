@@ -361,8 +361,7 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
 
             ((TextView) linearLayout.findViewById(R.id.txt_timkiemdiachi)).setText(location);
             linearLayout.findViewById(R.id.imgBtn_timkiemdiachi_themdiemsuco).setOnClickListener(this);
-            linearLayout.findViewById(R.id.imgBtn_timkiemdiachi).setOnClickListener(this);
-            linearLayout.findViewById(R.id.imgBtn_cancel_thongtinsuco).setOnClickListener(view -> mCallout.dismiss());
+            linearLayout.findViewById(R.id.imgBtn_cancel_timkiemdiachi).setOnClickListener(view -> mCallout.dismiss());
 
             linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             // show CallOut
@@ -394,7 +393,7 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
                     linearLayout = (LinearLayout) inflater.inflate(R.layout.layout_timkiemdiachi, null);
                     ((TextView) linearLayout.findViewById(R.id.txt_timkiemdiachi)).setText(addressLine);
                     linearLayout.findViewById(R.id.imgBtn_timkiemdiachi_themdiemsuco).setOnClickListener(Popup.this);
-                    linearLayout.findViewById(R.id.imgBtn_timkiemdiachi).setOnClickListener(Popup.this);
+                    linearLayout.findViewById(R.id.imgBtn_cancel_timkiemdiachi).setOnClickListener(view -> mCallout.dismiss());
                     linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     // show CallOut
                     mCallout.setLocation(position);
@@ -419,13 +418,6 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-//            case R.id.imgBtn_timkiemdiachi:
-//                if (mCallout != null && mCallout.isShowing())
-//                    mCallout.dismiss();
-//                break;
-//            case R.id.imgBtn_ViewMoreInfo:
-//                viewMoreInfo(false);
-//                break;
             case R.id.imgBtn_timkiemdiachi_themdiemsuco:
                 mMainActivity.onClick(view);
                 break;

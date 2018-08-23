@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mIsAddFeature;
     private TraCuuAdapter mSearchAdapter;
     private LocationDisplay mLocationDisplay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -389,13 +390,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void enableLocation() {
-       if (!mLocationDisplay.isStarted()) {
+        if (!mLocationDisplay.isStarted()) {
             mLocationDisplay.startAsync();
             setViewPointCenter(mLocationDisplay.getMapLocation());
-           mmIsLocating = true;
-           mLayoutLocation.setVisibility(View.VISIBLE);
-           mLayoutFlagLocation.setBackgroundColor(Color.GREEN);
-           mIsAddFeature = true;
+            mmIsLocating = true;
+            mLayoutLocation.setVisibility(View.VISIBLE);
+            mLayoutFlagLocation.setBackgroundColor(Color.GREEN);
+            mIsAddFeature = true;
         }
 
     }
@@ -404,20 +405,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FindLocationAsycn findLocationAsycn = new FindLocationAsycn(this, false,
                 mGeocoder, output -> {
             if (output != null) {
-                String subAdminArea = output.get(0).getSubAdminArea();
-                //nếu tài khoản có quyền truy cập vào
-//                if (subAdminArea.equals(getString(R.string.Quan5Name)) ||
-//                        subAdminArea.equals(getString(R.string.Quan6Name)) ||
-//                        subAdminArea.equals(getString(R.string.Quan8Name)) ||
-//                        subAdminArea.equals(getString(R.string.QuanBinhTanName)))
-                {
+                String adminArea = output.get(0).getAdminArea();
+                if (adminArea.equals(mApplication.getConstant.ADMIN_AREA_TPHCM)) {
                     mTxtSearchView.setQuery("", true);
                     mMapViewHandler.addFeature(null, mPointFindLocation);
                     deleteSearching();
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.message_not_area_management, Toast.LENGTH_LONG).show();
                 }
-//                else{
-//                    Toast.makeText(QuanLySuCo.this, R.string.message_not_area_management, Toast.LENGTH_LONG).show();
-//                }
             } else {
                 Toast.makeText(this, R.string.message_not_area_management, Toast.LENGTH_LONG).show();
             }
@@ -484,7 +479,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imgBtn_timkiemdiachi_themdiemsuco:
-//                themDiemSuCo();
                 themDiemSuCoNoCapture();
                 break;
         }

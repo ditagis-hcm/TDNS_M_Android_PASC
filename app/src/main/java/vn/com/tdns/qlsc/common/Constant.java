@@ -36,6 +36,10 @@ public class Constant {
     {
         URL_SUCO = "http://112.78.5.191:6080/arcgis/rest/services/TruyenDan/TruyenDanDiemSuCo/FeatureServer/0";
     }
+    public String ADMIN_AREA_TPHCM;
+    {
+        ADMIN_AREA_TPHCM = "Hồ Chí Minh";
+    }
     public int SCALE_IMAGE_WITH_LABLES;
     {
         SCALE_IMAGE_WITH_LABLES = 100;
