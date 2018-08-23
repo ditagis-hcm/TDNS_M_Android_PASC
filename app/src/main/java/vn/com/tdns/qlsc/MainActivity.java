@@ -41,6 +41,7 @@ import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
+import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.Symbol;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Point mPointFindLocation;
     private boolean mIsAddFeature;
     private TraCuuAdapter mSearchAdapter;
-
+    private LocationDisplay mLocationDisplay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("ClickableViewAccessibility")
     private void handlingMapViewDoneLoading() {
         setTooltipText();
+        mLocationDisplay = mMapView.getLocationDisplay();
         mSearchAdapter = new TraCuuAdapter(MainActivity.this, new ArrayList<>());
         mLstViewSearch.setAdapter(mSearchAdapter);
         mLstViewSearch.invalidate();
@@ -379,15 +381,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void disableLocation() {
+        mLocationDisplay.stop();
         mLayoutLocation.setVisibility(View.GONE);
         mLayoutFlagLocation.setBackgroundColor(Color.RED);
         mmIsLocating = false;
+        mPopUp.getCallout().dismiss();
     }
 
     private void enableLocation() {
-        mmIsLocating = true;
-        mLayoutLocation.setVisibility(View.VISIBLE);
-        mLayoutFlagLocation.setBackgroundColor(Color.GREEN);
+       if (!mLocationDisplay.isStarted()) {
+            mLocationDisplay.startAsync();
+            setViewPointCenter(mLocationDisplay.getMapLocation());
+           mmIsLocating = true;
+           mLayoutLocation.setVisibility(View.VISIBLE);
+           mLayoutFlagLocation.setBackgroundColor(Color.GREEN);
+           mIsAddFeature = true;
+        }
+
     }
 
     private void themDiemSuCoNoCapture() {

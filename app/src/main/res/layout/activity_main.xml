@@ -107,12 +107,6 @@
                     android:layout_weight="1"
                     android:background="@color/colorRed">
 
-                    <TextView
-                        style="@style/MyTextAppearance.White.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="24,7ft" />
                 </FrameLayout>
 
             </LinearLayout>

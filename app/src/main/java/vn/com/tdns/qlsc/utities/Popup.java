@@ -316,8 +316,7 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
         linearLayout = (LinearLayout) inflater.inflate(R.layout.layout_thongtinsuco, null);
         refreshPopup(mSelectedArcGISFeature);
         ((TextView) linearLayout.findViewById(R.id.txt_thongtin_ten)).setText(featureLayer.getName());
-        linearLayout.findViewById(R.id.imgBtn_layout_thongtinsuco).setOnClickListener(this);
-        linearLayout.findViewById(R.id.imgBtn_layout_thongtinsuco).setOnClickListener(view -> mCallout.dismiss());
+        linearLayout.findViewById(R.id.imgBtn_cancel_thongtinsuco).setOnClickListener(view -> mCallout.dismiss());
 
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         Envelope envelope = mSelectedArcGISFeature.getGeometry().getExtent();
@@ -363,7 +362,7 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
             ((TextView) linearLayout.findViewById(R.id.txt_timkiemdiachi)).setText(location);
             linearLayout.findViewById(R.id.imgBtn_timkiemdiachi_themdiemsuco).setOnClickListener(this);
             linearLayout.findViewById(R.id.imgBtn_timkiemdiachi).setOnClickListener(this);
-
+            linearLayout.findViewById(R.id.imgBtn_cancel_thongtinsuco).setOnClickListener(view -> mCallout.dismiss());
 
             linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             // show CallOut
@@ -420,7 +419,6 @@ public class Popup extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.imgBtn_layout_thongtinsuco:
 //            case R.id.imgBtn_timkiemdiachi:
 //                if (mCallout != null && mCallout.isShowing())
 //                    mCallout.dismiss();
