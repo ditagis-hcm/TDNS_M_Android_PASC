@@ -16,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import vn.com.tdns.qlsc.R;
-import vn.com.tdns.qlsc.common.DitagisApplication;
+import vn.com.tdns.qlsc.common.DApplication;
 import vn.com.tdns.qlsc.common.Preference;
 import vn.com.tdns.qlsc.entities.User;
 
@@ -26,7 +26,7 @@ public class LoginAsycn extends AsyncTask<String, Void, Void> {
     @SuppressLint("StaticFieldLeak")
     private Context mContext;
     private LoginAsycn.AsyncResponse mDelegate;
-    private DitagisApplication mApplication;
+    private DApplication mApplication;
 
     public interface AsyncResponse {
         void processFinish();
@@ -35,7 +35,7 @@ public class LoginAsycn extends AsyncTask<String, Void, Void> {
     public LoginAsycn(Context context, LoginAsycn.AsyncResponse delegate) {
         this.mContext = context;
         this.mDelegate = delegate;
-        mApplication = (DitagisApplication) context.getApplicationContext();
+        mApplication = (DApplication) context.getApplicationContext();
     }
 
     protected void onPreExecute() {

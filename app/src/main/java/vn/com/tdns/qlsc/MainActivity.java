@@ -1,7 +1,9 @@
 package vn.com.tdns.qlsc;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -18,17 +22,35 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
+import com.esri.arcgisruntime.ArcGISRuntimeException;
+import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
+import com.esri.arcgisruntime.geometry.Geometry;
+import com.esri.arcgisruntime.geometry.GeometryEngine;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Callout;
+import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
+import com.esri.arcgisruntime.mapping.view.Graphic;
+import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
+
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vn.com.tdns.qlsc.common.Constant;
-import vn.com.tdns.qlsc.common.DitagisApplication;
+import vn.com.tdns.qlsc.common.DApplication;
+import vn.com.tdns.qlsc.entities.DFeatureLayer;
+import vn.com.tdns.qlsc.utities.MapViewHandler;
+import vn.com.tdns.qlsc.utities.MySnackBar;
+import vn.com.tdns.qlsc.utities.Popup;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.mapViewMainActivity)
@@ -47,17 +69,23 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout mLayoutLocation;
     @BindView(R.id.flayout_main_flag_location)
     FrameLayout mLayoutFlagLocation;
-    private DitagisApplication mApplication;
+    private DApplication mApplication;
     private SearchView mTxtSearchView;
     private boolean mmIsLocating = false;
     private boolean mmIsSearching = false;
     private MenuItem mMenuSearch;
+    private MapViewHandler mMapViewHandler;
+    private Popup mPopUp;
+    private Geocoder mGeocoder;
+    private GraphicsOverlay mGraphicsOverlay;
+    private Point mPointFindLocation;
+    private boolean mIsAddFeature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mApplication = (DitagisApplication) getApplication();
+        mApplication = (DApplication) getApplication();
         ButterKnife.bind(this);
         startMain();
     }
@@ -76,31 +104,101 @@ public class MainActivity extends AppCompatActivity {
         setToolbar();
         setLicense();
         setTitle(getString(R.string.app_name));
+        mGeocoder = new Geocoder(this.getApplicationContext(), Locale.getDefault());
         mMapView.setMap(new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.7554041, 106.6546293, 12));
 
         mMapView.getMap().addDoneLoadingListener(this::handlingMapViewDoneLoading);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void handlingMapViewDoneLoading() {
         setTooltipText();
+        DApplication dApplication = (DApplication) getApplication();
 
-        final ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(
-                "http://sawagis.vn/arcgis/rest/services/TruyenDan/TruyenDanDiemSuCo/FeatureServer/0");
+        final ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(dApplication.getDLayerInfo.getUrl());
         final FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
 //        featureLayer.setDefinitionExpression(null);
-        featureLayer.setName("Sự cố");
+        featureLayer.setName(dApplication.getDLayerInfo.getTitleLayer());
         featureLayer.setMaxScale(0);
         featureLayer.setMinScale(1000000);
         featureLayer.setPopupEnabled(true);
 
-
         featureLayer.addDoneLoadingListener(() -> {
+            DFeatureLayer dFeatureLayer = new DFeatureLayer(featureLayer, dApplication.getDLayerInfo);
+            dApplication.setDFeatureLayer(dFeatureLayer);
             Callout callout = mMapView.getCallout();
+            mPopUp = new Popup(MainActivity.this, mMapView, serviceFeatureTable, callout, mGeocoder);
+
+
+            mMapViewHandler = new MapViewHandler(dFeatureLayer, callout, mMapView, mPopUp,
+                    MainActivity.this, mGeocoder);
 
         });
         mMapView.getMap().getOperationalLayers().add(featureLayer);
-    }
+        mGraphicsOverlay = new GraphicsOverlay();
+        mMapView.getGraphicsOverlays().add(mGraphicsOverlay);
+        mMapView.setOnTouchListener(new DefaultMapViewOnTouchListener(this, mMapView) {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                try {
+                    if (mMapViewHandler != null)
+                        mMapViewHandler.onSingleTapMapView(e);
+                } catch (ArcGISRuntimeException ex) {
+                    Log.d("", ex.toString());
+                }
+                return super.onSingleTapConfirmed(e);
+            }
 
+            @SuppressLint("SetTextI18n")
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                if (mIsAddFeature && mMapViewHandler != null) {
+                    //center is x, y
+                    Point center = mMapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).getTargetGeometry().getExtent().getCenter();
+
+                    //project is long, lat
+//                    Geometry project = GeometryEngine.project(center, SpatialReferences.getWgs84());
+
+                    //geometry is x,y
+//                    Geometry geometry = GeometryEngine.project(project, SpatialReferences.getWebMercator());
+                    SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.RED, 20);
+                    Graphic graphic = new Graphic(center, symbol);
+                    mGraphicsOverlay.getGraphics().clear();
+                    mGraphicsOverlay.getGraphics().add(graphic);
+                    double[] location = mMapViewHandler.onScroll(e2);
+
+                    mPopUp.getCallout().setLocation(center);
+                    mPointFindLocation = center;
+                }
+                return super.onScroll(e1, e2, distanceX, distanceY);
+            }
+
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                return super.onScale(detector);
+            }
+        });
+    }
+    private void setViewPointCenter(final Point position) {
+        if (mPopUp == null) {
+            MySnackBar.make(mMapView, getString(R.string.message_unloaded_map), true);
+        } else {
+            final Geometry geometry = GeometryEngine.project(position, SpatialReferences.getWebMercator());
+            final ListenableFuture<Boolean> booleanListenableFuture = mMapView.setViewpointCenterAsync(geometry.getExtent().getCenter());
+            booleanListenableFuture.addDoneListener(() -> {
+                try {
+                    if (booleanListenableFuture.get()) {
+                        MainActivity.this.mPointFindLocation = position;
+                    }
+                    mPopUp.showPopupFindLocation(position);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            });
+        }
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
