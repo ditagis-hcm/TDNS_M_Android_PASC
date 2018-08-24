@@ -2,10 +2,12 @@ package vn.com.tdns.qlsc;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startMain() {
+        requestPermisson();
         setToolbar();
         setLicense();
         setTitle(getString(R.string.app_name));
@@ -124,6 +127,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mMapView.getMap().addDoneLoadingListener(this::handlingMapViewDoneLoading);
     }
+
+    public void requestPermisson() {
+        boolean permissionCheck1 = ContextCompat.checkSelfPermission(this,
+                Constant.REQUEST_PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED;
+        boolean permissionCheck2 = ContextCompat.checkSelfPermission(this,
+                Constant.REQUEST_PERMISSIONS[1]) == PackageManager.PERMISSION_GRANTED;
+        boolean permissionCheck3 = ContextCompat.checkSelfPermission(this,
+                Constant.REQUEST_PERMISSIONS[2]) == PackageManager.PERMISSION_GRANTED;
+        boolean permissionCheck4 = ContextCompat.checkSelfPermission(this,
+                Constant.REQUEST_PERMISSIONS[3]) == PackageManager.PERMISSION_GRANTED;
+
+        if (!(permissionCheck1 && permissionCheck2 && permissionCheck3 && permissionCheck4)) {
+            // If permissions are not already granted, request permission from the user.
+            ActivityCompat.requestPermissions(this, Constant.REQUEST_PERMISSIONS, Constant.REQUEST_CODE_PERMISSION);
+        }  // Report other unknown failure types to the user - for example, location services may not // be enabled on the device. //                    String message = String.format("Error in DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent //                            .getSource().getLocationDataSource().getError().getMessage()); //                    Toast.makeText(QuanLySuCo.this, message, Toast.LENGTH_LONG).show();
+
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void handlingMapViewDoneLoading() {
