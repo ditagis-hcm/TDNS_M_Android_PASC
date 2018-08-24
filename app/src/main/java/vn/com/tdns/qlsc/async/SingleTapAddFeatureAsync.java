@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.widget.Toast;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.ArcGISFeature;
@@ -38,9 +39,7 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
     private Activity mActivity;
     private ServiceFeatureTable mServiceFeatureTable;
     @SuppressLint("StaticFieldLeak")
-    private MapView mMapView;
     private AsyncResponse mDelegate;
-    private Geocoder mGeocoder;
     private DApplication mApplication;
 
     public interface AsyncResponse {
@@ -48,14 +47,12 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
     }
 
     public SingleTapAddFeatureAsync(Activity activity,
-                                    ServiceFeatureTable serviceFeatureTable, MapView mapView, Geocoder geocoder, AsyncResponse delegate) {
+                                    ServiceFeatureTable serviceFeatureTable, AsyncResponse delegate) {
         this.mServiceFeatureTable = serviceFeatureTable;
-        this.mMapView = mapView;
         this.mActivity = activity;
         this.mApplication = (DApplication) activity.getApplication();
         this.mDialog = new ProgressDialog(activity, android.R.style.Theme_Material_Dialog_Alert);
         this.mDelegate = delegate;
-        this.mGeocoder = geocoder;
     }
 
     @Override
@@ -68,8 +65,6 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-//        final Point clickPoint = params[0];
-
         final Feature feature;
         try {
             feature = mServiceFeatureTable.createFeature();
@@ -81,14 +76,11 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
             addFeatureAsync(feature);
 
         } catch (Exception e) {
-            MySnackBar.make(mMapView, mActivity.getString(R.string.message_error_add_feature), true);
+            Toast.makeText(mActivity.getApplicationContext(),"Không phản ánh được sự cố. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
             publishProgress();
         }
-
-
         return null;
     }
-
     private void addFeatureAsync(final Feature feature) {
         new GenerateIDSuCoAsycn(mActivity, output -> {
             if (output.isEmpty()) {
@@ -121,7 +113,7 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
                                     if (result.iterator().hasNext()) {
                                         Feature item = result.iterator().next();
                                         ArcGISFeature arcGISFeature = (ArcGISFeature) item;
-                                        addAttachment(arcGISFeature,feature);
+                                        addAttachment(arcGISFeature, feature);
                                         publishProgress(item);
                                     }
                                 } catch (InterruptedException | ExecutionException e) {
@@ -165,23 +157,20 @@ public class SingleTapAddFeatureAsync extends AsyncTask<Void, Feature, Void> {
                                 }
                             } catch (InterruptedException | ExecutionException e) {
                                 e.printStackTrace();
-                            }
-                            if (mDialog != null && mDialog.isShowing()) {
-                                mDialog.dismiss();
+                            } finally {
+                                if (mDialog != null && mDialog.isShowing()) {
+                                    mDialog.dismiss();
+                                }
                             }
 
                         });
-
-
                     });
                 }
-
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         });
     }
-
 
     @Override
     protected void onProgressUpdate(Feature... values) {

@@ -170,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mPopUp = new Popup(MainActivity.this, mMapView, serviceFeatureTable, callout, mGeocoder);
 
 
-            mMapViewHandler = new MapViewHandler(dFeatureLayer, callout, mMapView, mPopUp,
-                    MainActivity.this, mGeocoder);
+            mMapViewHandler = new MapViewHandler(dFeatureLayer, mMapView, mPopUp,
+                    MainActivity.this);
             initAnnotation();
 
         });
@@ -206,8 +206,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Graphic graphic = new Graphic(center, symbol);
                     mGraphicsOverlay.getGraphics().clear();
                     mGraphicsOverlay.getGraphics().add(graphic);
-                    double[] location = mMapViewHandler.onScroll(e2);
-
                     mPopUp.getCallout().setLocation(center);
                     mPointFindLocation = center;
                 }
@@ -222,24 +220,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initAnnotation() {
-        AnnotationAdapter adapter = new AnnotationAdapter(this, new ArrayList<>());
-        Feature feature = mApplication.getDFeatureLayer().getLayer().getFeatureTable().createFeature();
-        Symbol symbol_khong = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
-        feature.getAttributes().put(Constant.FIELD_SUCO.TRANG_THAI, (short) 0);
-        Symbol symbol_chua = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
-        feature.getAttributes().put(Constant.FIELD_SUCO.TRANG_THAI, (short) 1);
-        Symbol symbol_dang = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
-        feature.getAttributes().put(Constant.FIELD_SUCO.TRANG_THAI, (short) 2);
-        Symbol symbol = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
-        Bitmap bitmap = null;
-        Bitmap bitmap_chua = null;
-        Bitmap bitmap_dang = null;
-        Bitmap bitmap_da = null;
         try {
-            bitmap = symbol_khong.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
-            bitmap_chua = symbol_chua.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
-            bitmap_dang = symbol_dang.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
-            bitmap_da = symbol.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
+            AnnotationAdapter adapter = new AnnotationAdapter(this, new ArrayList<>());
+            Feature feature = mApplication.getDFeatureLayer().getLayer().getFeatureTable().createFeature();
+            Symbol symbol_khong = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
+            feature.getAttributes().put(Constant.FIELD_SUCO.TRANG_THAI, (short) 0);
+            Symbol symbol_chua = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
+            feature.getAttributes().put(Constant.FIELD_SUCO.TRANG_THAI, (short) 1);
+            Symbol symbol_dang = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
+            feature.getAttributes().put(Constant.FIELD_SUCO.TRANG_THAI, (short) 2);
+            Symbol symbol = mApplication.getDFeatureLayer().getLayer().getRenderer().getSymbol(feature);
+            Bitmap bitmap  = symbol_khong.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
+            Bitmap bitmap_chua = symbol_chua.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
+            Bitmap bitmap_dang  = symbol_dang.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
+            Bitmap bitmap_da = symbol.createSwatchAsync(this, ContextCompat.getColor(this, R.color.colorWhite)).get();
 
             adapter.add(new AnnotationAdapter.Item(bitmap, "Chưa xác định"));
             adapter.add(new AnnotationAdapter.Item(bitmap_chua, "Chưa sửa chữa"));
@@ -250,8 +244,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-//        adapter.add();
     }
 
     private void setViewPointCenter(final Point position) {
@@ -482,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case Constant.REQUEST_CODE_ADD_FEATURE:
                 if (mApplication.getDiemSuCo.getPoint() != null) {
-                    mMapViewHandler.addFeature(null, mApplication.getDiemSuCo.getPoint());
+                    mMapViewHandler.addFeature(mApplication.getDiemSuCo.getPoint());
                     deleteSearching();
                 }
                 break;

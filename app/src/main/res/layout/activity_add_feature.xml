@@ -6,9 +6,13 @@
     tools:context=".AddFeatureActivity">
 
 
-        <FrameLayout
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,9 +51,8 @@
                         android:layout_marginRight="@dimen/margin_medium"
                         android:hint="Họ và tên"
                         android:inputType="text"
-
                         android:maxLines="1"
-                        android:nextFocusDown="@+id/txtPassword"
+                        android:nextFocusDown="@+id/etxtPhoneNumber_add_feature"
                         android:textCursorDrawable="@null" />
                 </LinearLayout>
 
@@ -76,10 +79,10 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/margin_medium"
                         android:hint="Số điện thoại"
-                        android:inputType="text"
+                        android:inputType="number"
 
                         android:maxLines="1"
-                        android:nextFocusDown="@+id/txtPassword"
+                        android:nextFocusDown="@+id/etxtAddress_add_feature"
                         android:textCursorDrawable="@null" />
                 </LinearLayout>
 
@@ -118,7 +121,7 @@
                         android:inputType="text"
 
                         android:maxLines="1"
-                        android:nextFocusDown="@+id/txtPassword"
+                        android:nextFocusDown="@+id/etxtNote_add_feature"
                         android:textCursorDrawable="@null" />
                 </LinearLayout>
 
@@ -148,7 +151,7 @@
                         android:inputType="text"
 
                         android:maxLines="1"
-                        android:nextFocusDown="@+id/txtPassword"
+                        android:nextFocusDown="@+id/btnAttachemnt_add_feature"
                         android:textCursorDrawable="@null" />
                 </LinearLayout>
 
@@ -174,30 +177,34 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/margin_medium"
-                        android:nextFocusDown="@+id/txtPassword"
+                        android:nextFocusDown="@+id/txt_add_feature_add_feature"
                         android:onClick="onClickButton"
                         android:text="Chụp ảnh"
                         android:textCursorDrawable="@null" />
 
                 </LinearLayout>
+
                 <ImageView
                     android:id="@+id/img_add_feature"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
             </LinearLayout>
+        </ScrollView>
 
-            <TextView
-                android:id="@+id/txt_add_feature_add_feature"
-                style="@style/MyTextAppearance.Blue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="onClickTextView"
-                android:padding="@dimen/padding_medium"
-                android:text="Phản ánh" />
-        </FrameLayout>
+        <TextView
+            android:id="@+id/txt_add_feature_add_feature"
+            style="@style/MyTextAppearance.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/colorPrimary"
+            android:onClick="onClickTextView"
+            android:padding="@dimen/padding_medium"
+            android:layout_margin="@dimen/margin_small"
+            android:text="Phản ánh" />
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
